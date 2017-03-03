@@ -1,1 +1,1 @@
-web: gunicorn main:app --worker-class aiohttp.worker.GunicornWebWorker --log-file -
+web: gunicorn aioApp.main:app --worker-class aiohttp.worker.GunicornWebWorker --log-file -

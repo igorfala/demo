@@ -1,22 +1,22 @@
 import asyncio, aiohttp_jinja2, jinja2
 import yaml, sys, os
 from aiohttp import web
-from routes import setup_routes
-from models import init_pg, close_pg
-
+from aioApp.routes import setup_routes
+from aioApp.models import init_pg, close_pg
+from aioApp.settings import CURR_DIR, BASE_DIR
 
 def init(loop):
     # setup application and extensions
     app = web.Application(loop=loop)
 
     # load config from yaml file in current dir
-    with open("../config/main_config.yaml") as f:
+    with open(os.path.join(BASE_DIR, "config/main_config.yaml")) as f:
         conf = yaml.safe_load(f)
 
     app['config'] = conf
 
     # setup Jinja2 template renderer
-    loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__),"templates"))
+    loader=jinja2.FileSystemLoader(os.path.join(CURR_DIR, "templates" ))
     aiohttp_jinja2.setup(
     app, loader=loader)
 
