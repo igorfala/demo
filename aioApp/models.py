@@ -26,6 +26,7 @@ choice = sa.Table(
     sa.ForeignKeyConstraint(['question_id'], [question.c.id],
                             name='choice_question_id_fkey',
                             ondelete='CASCADE'),
+                            )
 
 async def init_pg(app):
     if DEBUG == True:
