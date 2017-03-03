@@ -1,0 +1,7 @@
+[2017-03-03 18:23:17 +0000] [4833] [INFO] Starting gunicorn 19.6.0
+[2017-03-03 18:23:17 +0000] [4833] [INFO] Listening at: http://0.0.0.0:8080 (4833)
+[2017-03-03 18:23:17 +0000] [4833] [INFO] Using worker: gaiohttp
+[2017-03-03 18:23:17 +0000] [4837] [INFO] Booting worker with pid: 4837
+[2017-03-03 18:23:17 +0000] [4837] [INFO] Worker exiting (pid: 4837)
+[2017-03-03 18:23:17 +0000] [4833] [INFO] Shutting down: Master
+[2017-03-03 18:23:17 +0000] [4833] [INFO] Reason: App failed to load.
