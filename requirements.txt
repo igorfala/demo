@@ -11,13 +11,13 @@ boto3==1.4.4
 botocore==1.5.19
 chardet==2.3.0
 colorama==0.3.7
-command-not-found==0.3
+#command-not-found==0.3
 docutils==0.13.1
 gunicorn==19.6.0
 html5lib==0.999
 Jinja2==2.9.5
 jmespath==0.9.1
-language-selector==0.1
+#language-selector==0.1
 MarkupSafe==0.23
 multidict==2.1.4
 packaging==16.8
@@ -25,9 +25,9 @@ Pillow==2.9.0
 psycopg2==2.7
 pyasn1==0.2.3
 Pygments==2.0.1
-pygobject==3.16.2
+#pygobject==3.16.2
 pyparsing==2.1.10
-python-apt==1.0.1+ubuntu0.1
+#python-apt==1.0.1+ubuntu0.1
 python-dateutil==2.6.0
 PyYAML==3.12
 requests==2.7.0
@@ -37,7 +37,7 @@ s3transfer==0.1.10
 six==1.10.0
 SQLAlchemy==1.1.6
 ssh-import-id==4.5
-ufw==0.34
+#ufw==0.34
 urllib3==1.11
 uvloop==0.8.0
 yarl==0.9.8
