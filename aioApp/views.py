@@ -37,12 +37,14 @@ async def callback_shopify(request):
     #validate the shop params
     nonce = data['state']
     shop = data['shop']
-    with open(os.path.join(SHOPS_DIR, shop)) as f:
-        SHOP_CONF = yaml.safe_load(f)
-    if SHOP_CONF['state'] == nonce:
-        with open(CONFIG_FILE, "w") as yaml_file:
-            yaml_file.write(yaml.dump(SHOP_CONF, default_flow_style=False))
-        return web.Response(text=str(data))
+    if '.myshopify.com' in shop:
+        shop = shop.split('.myshopify.com')[0]
+        with open(os.path.join(SHOPS_DIR, shop)) as f:
+            SHOP_CONF = yaml.safe_load(f)
+        if SHOP_CONF['state'] == nonce:
+            with open(CONFIG_FILE, "w") as yaml_file:
+                yaml_file.write(yaml.dump(SHOP_CONF, default_flow_style=False))
+            return web.Response(text=str(data))
 
     return web.Response(text='ERROR')
     #async with aiohttp.ClientSession() as session:
