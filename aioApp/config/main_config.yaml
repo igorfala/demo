@@ -9,7 +9,3 @@ postgres:
 
 host: 0.0.0.0
 port: 8080
-
-shopify:
-  key: a8f7f0db93780b7ba2e731fe95cbacd6
-  secret: a49f3b8867f2a199e32b20f54c15a0b4
