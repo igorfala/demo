@@ -1,7 +1,7 @@
 import os
 import yaml
 
-DEBUG = True # Set False in Production, True in stagging
+DEBUG = False # Set False in Production, True in stagging
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CURR_DIR = os.path.dirname(os.path.abspath(__file__))
