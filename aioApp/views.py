@@ -1,9 +1,10 @@
 from aiohttp import web
+from config.settings import CONFIG_FILE, APP_CONF
+from aioApp.helpers.shopify import SHOPIFY_AUTH_URI
 import aioApp.models
 import aiohttp_jinja2
-
-#async def index(request):
-#    return web.Response(text='Hello World')
+import yaml
+import uuid
 
 @aiohttp_jinja2.template('index.html')
 async def index(request):
@@ -12,3 +13,40 @@ async def index(request):
         #records = await cursor.fetchall()
         questions = {'q1':"random question"}
         return {'questions': questions}
+
+# redirects to shopify auth with shop name
+async def connect_shopify(request):
+    shop = request.match_info['shop']
+    nonce = uuid.uuid4().hex
+    SHOPIFY_AUTH_URL = SHOPIFY_AUTH_URI.format(shop, nonce)
+    # uppdating config.yaml
+    APP_CONF[shop] = {}
+    APP_CONF[shop]['state'] = nonce
+    with open(CONFIG_FILE, "w") as yaml_file:
+        yaml_file.write(yaml.dump(APP_CONF, default_flow_style=False))
+
+    return web.Response(
+        status=302,
+        headers={
+            'location': SHOPIFY_AUTH_URL,
+        },
+    )
+
+# callback from shopify
+async def callback_shopify(request):
+    data = dict(request.rel_url.query)
+    #validate the shop params
+    shop = data['shop']
+    nonce = data['state']
+
+    if APP_CONF[shop]['state'] == nonce:
+        APP_CONF[shop] = data
+    with open(CONFIG_FILE, "w") as yaml_file:
+        yaml_file.write(yaml.dump(APP_CONF, default_flow_style=False))
+    return web.Response(text=str(data))
+
+    return web.Response(text='ERROR')
+    #async with aiohttp.ClientSession() as session:
+    #    data = None
+    #    async with session.post('https://api.github.com/events') as resp:
+    #        print(resp)

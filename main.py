@@ -1,9 +1,9 @@
+from aiohttp import web
+from config.routes import setup_routes
+from config.models import init_pg, close_pg
+from config.settings import aioApp_DIR, shopify_DIR, BASE_DIR, TEMPLATE_DIRS, APP_CONF
 import asyncio, aiohttp_jinja2, jinja2
 import sys, os
-from aiohttp import web
-from aioApp.routes import setup_routes
-from aioApp.models import init_pg, close_pg
-from aioApp.settings import CURR_DIR, BASE_DIR, APP_CONF
 
 def init(loop):
     # setup application and extensions
@@ -12,10 +12,9 @@ def init(loop):
     app['config'] = APP_CONF
 
     # setup Jinja2 template renderer
-    loader=jinja2.FileSystemLoader(os.path.join(CURR_DIR, "templates" ))
+    loader=jinja2.FileSystemLoader(TEMPLATE_DIRS)
     aiohttp_jinja2.setup(
     app, loader=loader)
-
 
     # create connection to the database
     app.on_startup.append(init_pg)

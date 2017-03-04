@@ -1,15 +1,19 @@
+host: 0.0.0.0
+kuvee-test1:
+  state: 473585915a68456589e33d46bc98e037
+port: 8080
 postgres:
   database: demo
-  user: vagrant
-  password: mobi
   host: localhost
-  port: 5432
-  minsize: 1
   maxsize: 5
-
-host: 0.0.0.0
-port: 8080
-
+  minsize: 1
+  password: mobi
+  port: 5432
+  user: vagrant
 shopify:
+  auth_uri: https://{}.myshopify.com/admin/oauth/authorize?client_id={}&scope={}&redirect_uri={}&state={}&grant_options[]={}
+  grant_options: ''
   key: a8f7f0db93780b7ba2e731fe95cbacd6
+  redirect_uri: https://kuveedemo.herokuapp.com/auth/shopify/callback
+  scope: write_orders,read_customers,read_content,write_content,read_products,write_products,read_themes,write_themes
   secret: a49f3b8867f2a199e32b20f54c15a0b4
