@@ -39,7 +39,8 @@ async def callback_shopify(request):
     shop = data['shop']
     if '.myshopify.com' in shop:
         shop = shop.split('.myshopify.com')[0]
-        with open(os.path.join(SHOPS_DIR, shop)) as f:
+        CONFIG_FILE = os.path.join(SHOPS_DIR, shop)
+        with open(CONFIG_FILE) as f:
             SHOP_CONF = yaml.safe_load(f)
         if SHOP_CONF['state'] == nonce:
             with open(CONFIG_FILE, "w") as yaml_file:
