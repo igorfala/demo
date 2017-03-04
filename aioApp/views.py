@@ -37,7 +37,7 @@ async def callback_shopify(request):
     #validate the shop params
     nonce = data['state']
     shop = data['shop']
-    with open(os.path.join(SHOPS_DIR, store)) as f:
+    with open(os.path.join(SHOPS_DIR, shop)) as f:
         SHOP_CONF = yaml.safe_load(f)
     if SHOP_CONF['state'] == nonce:
         with open(CONFIG_FILE, "w") as yaml_file:
