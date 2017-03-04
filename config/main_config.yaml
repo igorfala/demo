@@ -1,7 +1,6 @@
 host: 0.0.0.0
-kuvee-test1:
-  state: 473585915a68456589e33d46bc98e037
 port: 8080
+
 postgres:
   database: demo
   host: localhost
@@ -10,6 +9,7 @@ postgres:
   password: mobi
   port: 5432
   user: vagrant
+
 shopify:
   auth_uri: https://{}.myshopify.com/admin/oauth/authorize?client_id={}&scope={}&redirect_uri={}&state={}&grant_options[]={}
   grant_options: ''

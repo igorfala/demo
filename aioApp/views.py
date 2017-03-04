@@ -1,10 +1,11 @@
 from aiohttp import web
-from config.settings import CONFIG_FILE, APP_CONF
+from config.settings import CONFIG_DIR, APP_CONF, SHOPS_DIR
 from aioApp.helpers.shopify import SHOPIFY_AUTH_URI
 import aioApp.models
 import aiohttp_jinja2
 import yaml
 import uuid
+import os
 
 @aiohttp_jinja2.template('index.html')
 async def index(request):
@@ -19,11 +20,9 @@ async def connect_shopify(request):
     shop = request.match_info['shop']
     nonce = uuid.uuid4().hex
     SHOPIFY_AUTH_URL = SHOPIFY_AUTH_URI.format(shop, nonce)
-    # uppdating config.yaml
-    APP_CONF[shop] = {}
-    APP_CONF[shop]['state'] = nonce
+    CONFIG_FILE = os.path.join(SHOPS_DIR, shop)
     with open(CONFIG_FILE, "w") as yaml_file:
-        yaml_file.write(yaml.dump(APP_CONF, default_flow_style=False))
+        yaml_file.write(yaml.dump({"state": nonce}, default_flow_style=False))
 
     return web.Response(
         status=302,
@@ -36,14 +35,14 @@ async def connect_shopify(request):
 async def callback_shopify(request):
     data = dict(request.rel_url.query)
     #validate the shop params
-    shop = data['shop']
     nonce = data['state']
-
-    if APP_CONF[shop]['state'] == nonce:
-        APP_CONF[shop] = data
-    with open(CONFIG_FILE, "w") as yaml_file:
-        yaml_file.write(yaml.dump(APP_CONF, default_flow_style=False))
-    return web.Response(text=str(data))
+    shop = data['shop']
+    with open(os.path.join(SHOPS_DIR, store)) as f:
+        SHOP_CONF = yaml.safe_load(f)
+    if SHOP_CONF['state'] == nonce:
+        with open(CONFIG_FILE, "w") as yaml_file:
+            yaml_file.write(yaml.dump(SHOP_CONF, default_flow_style=False))
+        return web.Response(text=str(data))
 
     return web.Response(text='ERROR')
     #async with aiohttp.ClientSession() as session:
