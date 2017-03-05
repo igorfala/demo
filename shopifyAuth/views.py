@@ -70,7 +70,9 @@ async def callback_shopify(request):
 
 async def post_it(request):
     async with ClientSession() as session:
-        url = 'http://127.0.0.1:8080/post_to'
+        host = request.host
+        http = str(request.url).split(host)[0]
+        url = http+host+'/post_to'
         headers = {"Content-type": "application/json",}
         payload = {}
         payload['client_id'] = APP_CONF['shopify']['key']

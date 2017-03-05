@@ -25,8 +25,29 @@
     <![endif]-->
   </head>
   <body>
+    {% block navbar %}
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">
+            <img alt="Brand" src="{{ app.router.static.url(filename='img/snowboard.jpg') }}" width="30" height="30">
+          </a>
+        </div>
+      </div>
+    </nav>
+    {% endblock navbar %}
+
   {% block content %}
   {% endblock content %}
+  {% block footer %}
+  <div id="footer" class="container">
+      <nav class="navbar navbar-default navbar-fixed-bottom">
+          <div class="navbar-inner navbar-content-center">
+              <p class="text-muted credit text-right">Created by <strong>Igor Fala.&nbsp;&nbsp;</strong></a></p>
+          </div>
+      </nav>
+  </div>
+  {% endblock footer %}
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
