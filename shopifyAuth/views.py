@@ -43,10 +43,8 @@ async def callback_shopify(request):
         CONFIG_FILE = os.path.join(SHOPS_DIR, shop)
         with open(CONFIG_FILE) as f:
             SHOP_CONF = yaml.safe_load(f)
-        if SHOP_CONF['state'] == nonce:
-            with open(CONFIG_FILE, "w") as yaml_file:
-                yaml_file.write(yaml.dump(SHOP_CONF, default_flow_style=False))
 
+        if SHOP_CONF['state'] == nonce:
             async with ClientSession() as session:
                 url = APP_CONF['shopify']['admin_uri'].format(shop)
                 headers = {"Content-type": "application/json",}
@@ -54,16 +52,17 @@ async def callback_shopify(request):
                 payload['client_id'] = APP_CONF['shopify']['key']
                 payload['client_secret'] = APP_CONF['shopify']['secret']
                 payload['code'] = code
-                print(headers)
+
                 async with session.post(url,\
                    data=json.dumps(payload),\
                    headers=headers) as resp:
                    print(resp.status)
                    token_data = await resp.text()
-                   with open(CONFIG_FILE, "a") as yaml_file:
-                       yaml_file.write(yaml.dump(token_data, default_flow_style=False))
+                   data.update(token_data)
+                   with open(CONFIG_FILE, "w") as yaml_file:
+                       yaml_file.write(yaml.dump(data, default_flow_style=False))
 
-                with open(os.path.join(CONFIG_FILE, 'main_config.yaml')) as f:
+                with open(CONFIG_FILE) as f:
                     SHOP_CONF = yaml.safe_load(f)
             return web.Response(text=str(SHOP_CONF))
     return web.Response(text='NOT AUTHORIZED')
