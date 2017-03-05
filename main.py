@@ -1,7 +1,7 @@
 from aiohttp import web
 from config.routes import setup_routes
 from config.models import init_pg, close_pg
-from config.settings import aioApp_DIR, shopify_DIR, BASE_DIR, TEMPLATE_DIRS, APP_CONF
+from config.settings import shopifyAuth_DIR, shopify_DIR, BASE_DIR, TEMPLATE_DIRS, APP_CONF
 import asyncio, aiohttp_jinja2, jinja2
 import sys, os
 

@@ -1,7 +1,7 @@
 from aiohttp import web, ClientSession
 from config.settings import CONFIG_DIR, APP_CONF, SHOPS_DIR
-from aioApp.helpers.shopify import SHOPIFY_AUTH_URI
-import aioApp.models
+from shopifyAuth.helpers.shopify import SHOPIFY_AUTH_URI
+import shopifyAuth.models
 import aiohttp_jinja2
 import yaml
 import uuid
@@ -49,19 +49,40 @@ async def callback_shopify(request):
 
             async with ClientSession() as session:
                 url = APP_CONF['shopify']['admin_uri'].format(shop)
+                headers = {"Content-type": "application/json",}
                 payload = {}
                 payload['client_id'] = APP_CONF['shopify']['key']
                 payload['client_secret'] = APP_CONF['shopify']['secret']
                 payload['code'] = code
-                print(payload)
-                async with session.post(url,
-                   data=json.dumps(payload)) as resp:
+                print(headers)
+                async with session.post(url,\
+                   data=json.dumps(payload),\
+                   headers=headers) as resp:
                    print(resp.status)
                    print(await resp.text())
-            return web.Response(text=str(resp.text()))
+            return web.Response(text=await resp.text())
 
-    return web.Response(text='ERROR')
-    #async with aiohttp.ClientSession() as session:
-    #    data = None
-    #    async with session.post('https://api.github.com/events') as resp:
-    #        print(resp)
+    return web.Response(text='NOT AUTHORIZED')
+
+async def post_it(request):
+    async with ClientSession() as session:
+        url = 'http://127.0.0.1:8080/post_to'
+        headers = {"Content-type": "application/json",}
+        payload = {}
+        payload['client_id'] = APP_CONF['shopify']['key']
+        payload['client_secret'] = APP_CONF['shopify']['secret']
+        payload['code'] = '468b0ab605c66c2e597aa8859c2af0f7'
+        print(headers)
+        async with session.post(url,\
+           data=json.dumps(payload),\
+           headers=headers) as resp:
+           print(resp.status)
+           print(await resp.text())
+    return web.Response(text=await resp.text())
+
+async def post_to(request):
+    data = await request.json()
+    print(request.headers)
+    for d in data:
+        print(d, type(data))
+    return web.Response(text=str(data))
