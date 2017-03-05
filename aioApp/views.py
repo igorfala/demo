@@ -24,7 +24,6 @@ async def connect_shopify(request):
     CONFIG_FILE = os.path.join(SHOPS_DIR, shop)
     with open(CONFIG_FILE, "w") as yaml_file:
         yaml_file.write(yaml.dump({"state": nonce}, default_flow_style=False))
-
     return web.Response(
         status=302,
         headers={
@@ -54,11 +53,12 @@ async def callback_shopify(request):
                 payload['client_id'] = APP_CONF['shopify']['key']
                 payload['client_secret'] = APP_CONF['shopify']['secret']
                 payload['code'] = code
+                print(payload)
                 async with session.post(url,
                    data=json.dumps(payload)) as resp:
                    print(resp.status)
                    print(await resp.text())
-            return web.Response(text=resp.text())
+            return web.Response(text=str(resp.text()))
 
     return web.Response(text='ERROR')
     #async with aiohttp.ClientSession() as session:
