@@ -1,4 +1,4 @@
-from aiohttp import web
+from aiohttp import web, ClientSession
 from config.settings import CONFIG_DIR, APP_CONF, SHOPS_DIR
 from aioApp.helpers.shopify import SHOPIFY_AUTH_URI
 import aioApp.models
@@ -48,7 +48,7 @@ async def callback_shopify(request):
             with open(CONFIG_FILE, "w") as yaml_file:
                 yaml_file.write(yaml.dump(SHOP_CONF, default_flow_style=False))
 
-            async with aiohttp.ClientSession() as session:
+            async with ClientSession() as session:
                 url = APP_CONF['shopify']['admin_uri']
                 payload = {}
                 payload['client_id'] = APP_CONF['shopify']['key']
