@@ -6,6 +6,7 @@ import aiohttp_jinja2
 import yaml
 import uuid
 import os
+import json
 
 @aiohttp_jinja2.template('index.html')
 async def index(request):
@@ -37,6 +38,7 @@ async def callback_shopify(request):
     #validate the shop params
     nonce = data['state']
     shop = data['shop']
+    code = data['code']
     if '.myshopify.com' in shop:
         shop = shop.split('.myshopify.com')[0]
         CONFIG_FILE = os.path.join(SHOPS_DIR, shop)
@@ -45,7 +47,19 @@ async def callback_shopify(request):
         if SHOP_CONF['state'] == nonce:
             with open(CONFIG_FILE, "w") as yaml_file:
                 yaml_file.write(yaml.dump(SHOP_CONF, default_flow_style=False))
-            return web.Response(text=str(data))
+
+            async with aiohttp.ClientSession() as session:
+                url = APP_CONF['shopify']['admin_uri']
+                payload = {}
+                payload['client_id'] = APP_CONF['shopify']['key']
+                payload['client_secret'] = APP_CONF['shopify']['secret']
+                payload['code'] = code
+                async with session.post(url,
+                   data=json.dumps(payload),
+                   headers=headers) as resp:
+                   print(resp.status)
+                   print(await resp.text())
+            return web.Response(text=resp.text())
 
     return web.Response(text='ERROR')
     #async with aiohttp.ClientSession() as session:

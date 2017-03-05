@@ -17,3 +17,4 @@ shopify:
   redirect_uri: https://kuveedemo.herokuapp.com/auth/shopify/callback
   scope: write_orders,read_customers,read_content,write_content,read_products,write_products,read_themes,write_themes
   secret: a49f3b8867f2a199e32b20f54c15a0b4
+  admin_uri: https://{}.myshopify.com/admin/oauth/access_token
