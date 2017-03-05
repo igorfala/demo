@@ -55,8 +55,7 @@ async def callback_shopify(request):
                 payload['client_secret'] = APP_CONF['shopify']['secret']
                 payload['code'] = code
                 async with session.post(url,
-                   data=json.dumps(payload),
-                   headers=headers) as resp:
+                   data=json.dumps(payload)) as resp:
                    print(resp.status)
                    print(await resp.text())
             return web.Response(text=resp.text())
