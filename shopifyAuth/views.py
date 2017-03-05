@@ -57,8 +57,10 @@ async def callback_shopify(request):
                    data=json.dumps(payload),\
                    headers=headers) as resp:
                    token_data = await resp.text()
-                   print(resp.status, data, token_data)
-                   data.update(token_data)
+                   print(resp.status, data, type(data), token_data, type(token_data))
+                   data['access_token'] = token_data['access_token']
+                   data['scope'] = token_data['scope']
+                   #data.update(token_data)
                    with open(CONFIG_FILE, "w") as yaml_file:
                        yaml_file.write(yaml.dump(data, default_flow_style=False))
 
