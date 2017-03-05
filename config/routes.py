@@ -15,6 +15,7 @@ shopifyAuth_rt = [
 # routes for shopify
 shopify_rt = [
         ('GET', '/shop',        shopify_v.index,  's_index'),
+        ('GET', '/proxy',        shopify_v.proxy,  's_proxy'),
         ]
 
 # all the routes
