@@ -49,7 +49,7 @@ async def callback_shopify(request):
                 yaml_file.write(yaml.dump(SHOP_CONF, default_flow_style=False))
 
             async with ClientSession() as session:
-                url = APP_CONF['shopify']['admin_uri']
+                url = APP_CONF['shopify']['admin_uri'].format(shop)
                 payload = {}
                 payload['client_id'] = APP_CONF['shopify']['key']
                 payload['client_secret'] = APP_CONF['shopify']['secret']
