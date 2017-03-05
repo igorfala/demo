@@ -59,9 +59,13 @@ async def callback_shopify(request):
                    data=json.dumps(payload),\
                    headers=headers) as resp:
                    print(resp.status)
-                   print(await resp.text())
-            return web.Response(text=await resp.text())
+                   token_data = await resp.text()
+                   with open(CONFIG_FILE, "a") as yaml_file:
+                       yaml_file.write(yaml.dump(token_data, default_flow_style=False))
 
+                with open(os.path.join(CONFIG_FILE, 'main_config.yaml')) as f:
+                    SHOP_CONF = yaml.safe_load(f)
+            return web.Response(text=str(SHOP_CONF))
     return web.Response(text='NOT AUTHORIZED')
 
 async def post_it(request):
@@ -83,6 +87,10 @@ async def post_it(request):
 async def post_to(request):
     data = await request.json()
     print(request.headers)
+    CONFIG_FILE = os.path.join(SHOPS_DIR, 'kuvee-test1')
+    with open(CONFIG_FILE, "a") as yaml_file:
+        yaml_file.write(yaml.dump(data, default_flow_style=False))
     for d in data:
-        print(d, type(data))
+
+        print(d, data[d], type(data))
     return web.Response(text=str(data))
