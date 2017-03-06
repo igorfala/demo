@@ -32,7 +32,7 @@ async def shop_info(request):
     context = {'hi':'Hello'}
     print(context)
     response = aiohttp_jinja2.render_template('shop.html', request, context)
-    #response.headers['Content-Type'] = 'application/liquid'
+    response.headers['Content-Type'] = 'application/liquid'
     return response
 
 # Call to the API to get Shop Info
