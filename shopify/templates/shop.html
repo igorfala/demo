@@ -6,12 +6,8 @@ Shop Info
 {% block content %}
 <h1 class="text-center">Shop Information</h1>
 <br>
-<h1> yes:) {{shop.address.summary}} </h1>
+<h1> yes:) {{ shop.address.summary }} </h1>
 </br>
-<ul>
-{% for item in shop %}
-<li>{{item}}:&nbsp<a href="/">{{ shop[item]}}</a></li>
-{% endfor %}
-</ul>
+
 <br/><br/>
 {% endblock content %}
