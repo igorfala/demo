@@ -1,37 +1,17 @@
 {% extends "base.html" %}
 {% block title %}
-Demo - Index
+Shop Info
 {% endblock title %}
 
 {% block content %}
-
-{{question}}
-
-<h1 class="text-center">Hello, Shop!</h1>
-<br/><br/><br/><br/>
-<div class="container">
-    <div class="row">
-        <div class="col-xs-3">
-            <a href="#" class="thumbnail">
-                <img src="{{ app.router.static.url(filename='img/1.jpg') }}" alt="125x125">
-            </a>
-        </div>
-        <div class="col-xs-3">
-            <a href="#" class="thumbnail">
-                <img src="{{ app.router.static.url(filename='img/2.jpg') }}" alt="125x125">
-            </a>
-        </div>
-        <div class="col-xs-3">
-            <a href="#" class="thumbnail">
-                <img src="{{ app.router.static.url(filename='img/3.jpg') }}" alt="125x125">
-            </a>
-        </div>
-        <div class="col-xs-3">
-            <a href="#" class="thumbnail">
-                <img src="{{ app.router.static.url(filename='img/4.jpg') }}" alt="125x125">
-            </a>
-        </div>
-    </div>
-</div>
-
+<h1 class="text-center">Shop Information</h1>
+<br>
+<h1> yes:) {{shop.address.summary}} </h1>
+</br>
+<ul>
+{% for item in shop %}
+<li>{{item}}:&nbsp<a href="/">{{ shop[item]}}</a></li>
+{% endfor %}
+</ul>
+<br/><br/>
 {% endblock content %}

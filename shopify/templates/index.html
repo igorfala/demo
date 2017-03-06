@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}
+Demo - Index
+{% endblock title %}
+
+{% block content %}
+
+<h1 class="text-center">Hello, Shop!</h1>
+<br/><br/><br/><br/>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3">
+            <a href="#" class="thumbnail">
+                <img src="{{ app.router.static.url(filename='img/1.jpg') }}" alt="125x125">
+            </a>
+        </div>
+        <div class="col-xs-3">
+            <a href="#" class="thumbnail">
+                <img src="{{ app.router.static.url(filename='img/2.jpg') }}" alt="125x125">
+            </a>
+        </div>
+        <div class="col-xs-3">
+            <a href="#" class="thumbnail">
+                <img src="{{ app.router.static.url(filename='img/3.jpg') }}" alt="125x125">
+            </a>
+        </div>
+        <div class="col-xs-3">
+            <a href="#" class="thumbnail">
+                <img src="{{ app.router.static.url(filename='img/4.jpg') }}" alt="125x125">
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

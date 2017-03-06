@@ -4,19 +4,20 @@ import shopify.views as shopify_v
 
 # routes for shopifyAuth
 shopifyAuth_rt = [
-        ('GET', '/',        shopifyAuth_v.index,  'a_index'),
-        ('GET', '/connect_shopify/{shop}',        shopifyAuth_v.connect_shopify,  'a_connect_shopify'),
-        ('GET', '/auth/shopify/callback',        shopifyAuth_v.callback_shopify,  'a_callback_shopify'),
-        ('GET', '/post_it/{code}',        shopifyAuth_v.post_it,  's_post'),
-        ('POST', '/post_to',        shopifyAuth_v.post_to,  's_post_to'),
+    ('*', '/',                                shopifyAuth_v.auth,               'a_auth_shopify'),
+    ('GET', '/connect_shopify/{shop}',        shopifyAuth_v.connect_shopify,    'a_connect_shopify'),
+    ('GET', '/auth/shopify/callback',         shopifyAuth_v.callback_shopify,   'a_callback_shopify'),
+    ('GET', '/post_it/{code}',                shopifyAuth_v.post_it,            's_post'),
+    ('POST', '/post_to',                      shopifyAuth_v.post_to,            's_post_to'),
 
-        ]
+    ]
 
 # routes for shopify
 shopify_rt = [
-        ('GET', '/shop',        shopify_v.index,  's_index'),
-        ('GET', '/proxy',        shopify_v.proxy,  's_proxy'),
-        ]
+    ('GET', '/proxy/img',                     shopify_v.img,                    's_img'),
+    ('GET', '/proxy',                         shopify_v.proxy,                  's_proxy'),
+    ('GET', '/proxy/shop_info/{shop}',        shopify_v.shop_info,              's_shop_info'),
+    ]
 
 # all the routes
 # for new apps create new route list

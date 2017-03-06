@@ -8,13 +8,27 @@ import uuid
 import os
 import json
 
-@aiohttp_jinja2.template('index.html')
-async def index(request):
+# first page form
+@aiohttp_jinja2.template('auth.html')
+async def auth(request):
     async with request.app['db'].acquire() as conn:
         #cursor = await conn.execute(db.question.select())
         #records = await cursor.fetchall()
-        questions = {'q1':"random question"}
-        return {'questions': questions}
+        if request.method == 'POST':
+            data = await request.post()
+            shop = data['shop']
+            print(shop)
+            host = request.url
+            url = str(host) + 'connect_shopify/' + shop
+            return web.Response(
+                status=302,
+                headers={
+                    'location': url,
+                },
+            )
+
+        else:
+            return
 
 # redirects to shopify auth with shop name
 async def connect_shopify(request):
@@ -68,6 +82,8 @@ async def callback_shopify(request):
             return web.Response(text=str(SHOP_CONF))
     return web.Response(text='NOT AUTHORIZED')
 
+###########################
+# testing
 async def post_it(request):
     async with ClientSession() as session:
         host = request.host
