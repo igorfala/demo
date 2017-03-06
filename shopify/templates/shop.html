@@ -4,10 +4,17 @@ Shop Info
 {% endblock title %}
 
 {% block content %}
-<h1 class="text-center">Shop Information</h1>
+<h1 class="text-center">Product Information</h1>
 <br>
-<h1> yes:) {{ shop.address.summary }} </h1>
+{% for product in products %}
+<h1> yes:) {{ product.title }} </h1>
 </br>
+{% endfor %}
+<ul>
+{% for product in products %}
+<li>{{product.variants[0].weight}}:&nbsp<a href="/">{{ product.id }}</a></li>
+{% endfor %}
+</ul>
 
 <br/><br/>
 {% endblock content %}

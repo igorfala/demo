@@ -11,10 +11,26 @@ def init(loop):
 
     app['config'] = APP_CONF
 
+    def null_join(value, sep):
+        return sep.join('' if v is None else str(v) for v in value)
+
+    jinja_args = {
+        #'block_start_string': '<%',
+        #'block_end_string': '%>',
+        #'variable_start_string': '<<',
+        #'variable_end_string': '>>',
+        #'line_statement_prefix': '#',
+        #'line_comment_prefix': '##',
+        'loader': jinja2.FileSystemLoader(TEMPLATE_DIRS),
+        #'filters': {
+        #    'null_join': null_join,
+        #},
+    }
+
     # setup Jinja2 template renderer
-    loader=jinja2.FileSystemLoader(TEMPLATE_DIRS)
+    #loader=jinja2.FileSystemLoader(TEMPLATE_DIRS)
     aiohttp_jinja2.setup(
-    app, loader=loader)
+    app, **jinja_args)
 
     # create connection to the database
     app.on_startup.append(init_pg)
