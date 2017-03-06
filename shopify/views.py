@@ -29,7 +29,6 @@ async def proxy(request):
 async def shop_info(request):
     shop = request.match_info['shop']
     context = await get_shop_info(shop)
-    context = {'hi':'Hello'}
     print(context)
     response = aiohttp_jinja2.render_template('shop.html', request, context)
     response.headers['Content-Type'] = 'application/liquid'
