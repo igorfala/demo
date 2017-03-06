@@ -38,7 +38,7 @@ async def shop_info(request):
 async def get_shop_info(shop):
     async with ClientSession() as session:
         url = 'https://{}.myshopify.com/admin/shop.json'.format(shop)
-        headers = {'X-Shopify-Access-Token': 'dcb788bd7a97fade33553b35011391a7'}
+        headers = {'X-Shopify-Access-Token': 'ed50fb7a0f307024e7878bbf010d71a4'}
 
         async with session.get(url, headers=headers) as resp:
             return await resp.json()
