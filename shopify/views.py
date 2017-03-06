@@ -17,9 +17,10 @@ async def proxy(request):
     print(request.headers, type(request.headers))
     print(request.match_info, type(request.match_info))
     print(request.rel_url.query_string, type(request.rel_url.query_string))
-    print(request.content, type(request.content))
-    context = {'questions': request.content}
-    response = aiohttp_jinja2.render_template('index.html', request, context)
+    print((await request.text()), type(await request.text()))
+    context = {'questions': (await request.text())}
+    print(context)
+    response = aiohttp_jinja2.render_template('shop.html', request, context)
     response.headers['Content-Type'] = 'application/liquid'
-
+    print(response, response.headers, response.text)
     return response
