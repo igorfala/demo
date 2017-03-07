@@ -7,6 +7,7 @@ import yaml
 import uuid
 import os
 import json
+import sqlalchemy
 
 # first page form
 @aiohttp_jinja2.template('auth.html')
@@ -36,8 +37,15 @@ async def connect_shopify(request):
 
         with open(CONFIG_FILE, "w") as yaml_file:
             yaml_file.write(yaml.dump({"state": nonce}, default_flow_style=False))
+        cursor = await conn.execute(shops.select().where(shops.c.shop == shop))
+        # update if exists or create
+        if not await cursor.fetchone():
+            print(' shop created')
+            cursor = await conn.execute(shops.insert().values(state=nonce, shop=shop))
+        else:
+            print('shop updated')
+            cursor = await conn.execute(shops.update().where(shops.c.shop==shop).values(state=nonce))
 
-        cursor = await conn.execute(shops.insert().values(state=nonce, shop=shop))
         return web.Response(
             status=302,
             headers={
@@ -64,9 +72,11 @@ async def callback_shopify(request):
                 SHOP_CONF = yaml.safe_load(f)
             # retrieving state and checking for shop name
             try:
-                state = await conn.execute(shops.select([state]).where(shop == shop))
-            except:
-                print('The shop {} is not in the database')
+                state = await conn.execute(shops.select(['state']).where(shop == shop))
+            except Exception as e:
+                print('Reason: {}'.format(e))
+                print('_____________________________________')
+                print('The shop {} is not in the database'.format(shop))
                 return web.Response(text='NOT AUTHORIZED')
 
             if state == nonce:
@@ -91,8 +101,9 @@ async def callback_shopify(request):
                            yaml_file.write(yaml.dump(data, default_flow_style=False))
                        shop_data, shop_user_data = process_token_data(data)
                        if shop_user_data:
-                           await conn.execute(shop_users.insert().values(**shop_user_data))
+                           await conn.execute(shop_users.update().where(shop_users.c.id==shop_user_data['id']).values(**shop_user_data))
                        await conn.execute(shops.insert().values(**shop_data))
+                       cursor = await conn.execute(shops.update().where(shops.c.shop==shop).values(**shop_data))
 
                     with open(CONFIG_FILE) as f:
                         SHOP_CONF = yaml.safe_load(f)

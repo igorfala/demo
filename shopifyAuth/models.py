@@ -27,7 +27,7 @@ shops = sa.Table(
     sa.Column('access_token', sa.String(200),  ),
     sa.Column('state', sa.String(200), ),
     sa.Column('code', sa.String(200), ),
-    sa.Column('shop', sa.String(200), ),
+    sa.Column('shop', sa.String(200), unique=True),
     sa.Column('hmac', sa.String(200), ),
     sa.Column('expires_in', sa.Integer, ),
 
