@@ -27,3 +27,8 @@ choice = sa.Table(
                             name='choice_question_id_fkey',
                             ondelete='CASCADE'),
                             )
+# Please add all the tables to this list
+tables = [
+        question,
+        choice
+        ]

@@ -5,3 +5,11 @@ SHOPIFY_AUTH_URI = 'https://kuvee-test1.myshopify.com/admin/oauth/authorize?clie
 
 SHOPIFY_AUTH_URI = APP_CONF['shopify']['auth_uri'].format('{}',APP_CONF['shopify']['key'],\
                 APP_CONF['shopify']['scope'], APP_CONF['shopify']['redirect_uri'], '{}', APP_CONF['shopify']['grant_options'])
+
+def process_token_data(data):
+    #check if grant_options: per-user
+    shop_user_data = data.pop('associated_user', None)
+    if shop_user_data:
+        data['associated_user_id'] = shop_user_data['id']
+    
+    return shop_data, shop_user_data

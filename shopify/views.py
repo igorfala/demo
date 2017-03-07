@@ -2,24 +2,16 @@ from aiohttp import web, ClientSession, BasicAuth
 import shopifyAuth.models
 import aiohttp_jinja2
 
-#async def index(request):
-#    return web.Response(text='Hello World')
-
+#example
 @aiohttp_jinja2.template('index.html')
 async def img(request):
     async with request.app['db'].acquire() as conn:
         #cursor = await conn.execute(db.question.select())
         #records = await cursor.fetchall()
         return
-
+#example
 async def proxy(request):
-    print(request.url, type(request.url))
-    print(request.headers, type(request.headers))
-    print(request.match_info, type(request.match_info))
-    print(request.rel_url.query_string, type(request.rel_url.query_string))
-    print((await request.text()), type(await request.text()))
-    context = {'questions': (await request.text())}
-    print(context)
+    context = {'params': "some params"}
     response = aiohttp_jinja2.render_template('index.html', request, context)
     #response.headers['Content-Type'] = 'application/liquid'
     print(response, response.headers)
@@ -36,7 +28,7 @@ async def shop_info(request):
 
 # Call to the API to get Shop Info
 async def get_shop_info(shop):
-    async with ClientSession() as session:  
+    async with ClientSession() as session:
         url = 'https://{}.myshopify.com/admin/products.json'.format(shop)
         headers = {'X-Shopify-Access-Token': 'ed50fb7a0f307024e7878bbf010d71a4'}
 

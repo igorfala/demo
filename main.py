@@ -1,9 +1,37 @@
 from aiohttp import web
 from config.routes import setup_routes
-from config.models import init_pg, close_pg
+from config.models import init_pg, close_pg, tables, engine_pg
 from config.settings import shopifyAuth_DIR, shopify_DIR, BASE_DIR, TEMPLATE_DIRS, APP_CONF
 import asyncio, aiohttp_jinja2, jinja2
+import sqlalchemy
 import sys, os
+import argparse
+
+#command line parser
+def parser(*args):
+    parser = argparse.ArgumentParser(description='Main command for the app')
+    parser.add_argument('option1', help='runs the local web server', \
+                        default = 'run', nargs='?')
+    parser.add_argument('option2', help='runs the local web server', \
+                        default = None, nargs='?')
+    args = parser.parse_args()
+    if args.option1 == 'run':
+        # not processed (for host and port)
+        main(args.option2)
+    elif args.option1 == 'migrate':
+        create_tables(tables )
+
+# called with migrate command
+def create_tables(tables = tables):
+    engine = engine_pg(APP_CONF['postgres']['url'])
+    for table in tables:
+        try:
+            getattr(table, 'create')(engine)
+            print('Table: {}; created.'.format(table))
+        except sqlalchemy.exc.ProgrammingError as e:
+            print('Problem creating table: {}'.format(table))
+            print('Reason: {}'.format(e))
+        print('_____________________________________')
 
 def init(loop):
     # setup application and extensions
@@ -44,7 +72,7 @@ def init(loop):
 # Creates the app for gunicorn
 def run_gunicorn():
     loop = asyncio.get_event_loop()
-    app = init(loop)
+    app = init(loop=loop)
     return app
 
 # App used by gunicorn
@@ -59,4 +87,4 @@ def main(argv):
                 port=app['config']['port'])
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    parser(sys.argv[1:])

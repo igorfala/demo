@@ -1,6 +1,12 @@
 from config.settings import DEBUG
 import aiopg.sa   # aiohttp library for postgres
-import os
+import os, sqlalchemy
+from shopify.models import tables as ts1
+from shopifyAuth.models import tables as ts2
+# import app tables and add them here
+# ex: tables += new_tabels
+tables = ts1
+tables += ts2
 
 async def init_pg(app):
     if DEBUG == True:
@@ -23,3 +29,17 @@ async def init_pg(app):
 async def close_pg(app):
     app['db'].close()
     await app['db'].wait_closed()
+
+# for migrating
+def engine_pg(url):
+    #meta = sqlalchemy.MetaData(bind=con, reflect=True)
+    if DEBUG == True:
+        #conf = app['postgres']
+        engine = sqlalchemy.create_engine(
+            url
+            )
+    else:
+        DEFAULT_DB_ENV = os.environ['DATABASE_URL']
+        engine = sqlalchemy.create_engine(DEFAULT_DB_ENV)
+
+    return engine

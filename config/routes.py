@@ -15,14 +15,15 @@ shopifyAuth_rt = [
 # routes for shopify
 shopify_rt = [
     ('GET', '/proxy/img',                     shopify_v.img,                    's_img'),
-    ('GET', '/proxy',                         shopify_v.proxy,                  's_proxy'),
+    ('GET', '/proxy/index',                         shopify_v.proxy,                  's_proxy'),
     ('GET', '/proxy/shop_info/{shop}',        shopify_v.shop_info,              's_shop_info'),
     ]
 
 # all the routes
 # for new apps create new route list
 # then add it to routes: routes+=new_rt_list
-routes = shopifyAuth_rt + shopify_rt
+routes = shopifyAuth_rt
+routes += shopify_rt
 
 # route dispatch
 def setup_routes(app):

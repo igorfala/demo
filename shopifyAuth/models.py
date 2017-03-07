@@ -5,25 +5,41 @@ import os
 
 meta = sa.MetaData()
 
-question = sa.Table(
-    'question', meta,
+shop_users = sa.Table(
+    'shop_users', meta,
     sa.Column('id', sa.Integer, nullable=False),
-    sa.Column('question_text', sa.String(200), nullable=False),
-    sa.Column('pub_date', sa.Date, nullable=False),
+    sa.Column('first_name', sa.String(200), nullable=False),
+    sa.Column('last_name', sa.String(200), nullable=False),
+    sa.Column('email', sa.String(200), nullable=False),
+    sa.Column('account_owner', sa.Boolean),
 
     # Indexes #
-    sa.PrimaryKeyConstraint('id', name='question_id_pkey'))
+    sa.PrimaryKeyConstraint('id', name='shop_id_pkey'),
+    )
 
-choice = sa.Table(
-    'choice', meta,
-    sa.Column('id', sa.Integer, nullable=False),
-    sa.Column('question_id', sa.Integer, nullable=False),
-    sa.Column('choice_text', sa.String(200), nullable=False),
-    sa.Column('votes', sa.Integer, server_default="0", nullable=False),
+shops = sa.Table(
+    'shops', meta,
+    sa.Column('id', sa.Integer, nullable=False, primary_key=True),
+    sa.Column('scope', sa.String(500) ),
+    sa.Column('associated_user_scope', sa.String(200)),
+    sa.Column('associated_user_id', sa.Integer, ),
+    sa.Column('timestamp', sa.Integer, ),
+    sa.Column('access_token', sa.String(200),  ),
+    sa.Column('state', sa.String(200), ),
+    sa.Column('code', sa.String(200), ),
+    sa.Column('shop', sa.String(200), ),
+    sa.Column('hmac', sa.String(200), ),
+    sa.Column('expires_in', sa.Integer, ),
 
     # Indexes #
-    sa.PrimaryKeyConstraint('id', name='choice_id_pkey'),
-    sa.ForeignKeyConstraint(['question_id'], [question.c.id],
-                            name='choice_question_id_fkey',
+    sa.PrimaryKeyConstraint('id', name='shop_pkey'),
+    sa.ForeignKeyConstraint(['associated_user_id'], [shop_users.c.id],\
+                            name='user_associated_user_id_fkey',
                             ondelete='CASCADE'),
                             )
+
+# Please add all the tables to this list
+tables = [
+        shops,
+        shop_users,
+        ]
