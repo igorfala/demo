@@ -1,6 +1,6 @@
 from aiohttp import web, ClientSession
 from config.settings import CONFIG_DIR, APP_CONF, SHOPS_DIR
-from shopifyAuth.helpers.shopify import SHOPIFY_AUTH_URI
+from shopifyAuth.helpers.shopify import SHOPIFY_AUTH_URI, process_token_data
 from shopifyAuth.models import shops, shop_users
 import aiohttp_jinja2
 import yaml
@@ -72,11 +72,13 @@ async def callback_shopify(request):
                 SHOP_CONF = yaml.safe_load(f)
             # retrieving state and checking for shop name
             try:
-                state = await conn.execute(shops.select(['state']).where(shop == shop))
+                cursor = await conn.execute(shops.select().where(shops.c.shop == shop))
+                row = await cursor.fetchone()
+                state = row.state
+
             except Exception as e:
                 print('Reason: {}'.format(e))
                 print('_____________________________________')
-                print('The shop {} is not in the database'.format(shop))
                 return web.Response(text='NOT AUTHORIZED')
 
             if state == nonce:
@@ -102,12 +104,13 @@ async def callback_shopify(request):
                        shop_data, shop_user_data = process_token_data(data)
                        if shop_user_data:
                            await conn.execute(shop_users.update().where(shop_users.c.id==shop_user_data['id']).values(**shop_user_data))
-                       await conn.execute(shops.insert().values(**shop_data))
-                       cursor = await conn.execute(shops.update().where(shops.c.shop==shop).values(**shop_data))
-
+                       await conn.execute(shops.update().where(shops.c.shop==shop).values(**shop_data))
                     with open(CONFIG_FILE) as f:
                         SHOP_CONF = yaml.safe_load(f)
-                return web.Response(text=str(SHOP_CONF))
+                    cursor = await conn.execute(shops.select())
+                    obj = await cursor.fetchall()
+
+                return web.Response(text=str(obj.items()))
             print('INCORECT NONCE')
     return web.Response(text='NOT AUTHORIZED')
 

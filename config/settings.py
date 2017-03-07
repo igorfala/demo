@@ -1,7 +1,7 @@
 import os
 import yaml
 
-DEBUG = False# Set False in Production, True in stagging
+DEBUG = False # Set False in Production, True in stagging
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 shopifyAuth_DIR = os.path.join(BASE_DIR, 'shopifyAuth')

@@ -11,5 +11,5 @@ def process_token_data(data):
     shop_user_data = data.pop('associated_user', None)
     if shop_user_data:
         data['associated_user_id'] = shop_user_data['id']
-    
-    return shop_data, shop_user_data
+
+    return  data, shop_user_data
