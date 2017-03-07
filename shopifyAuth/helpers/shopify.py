@@ -8,6 +8,7 @@ SHOPIFY_AUTH_URI = APP_CONF['shopify']['auth_uri'].format('{}',APP_CONF['shopify
 
 def process_token_data(data):
     #check if grant_options: per-user
+
     shop_user_data = data.pop('associated_user', None)
     if shop_user_data:
         data['associated_user_id'] = shop_user_data['id']

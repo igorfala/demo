@@ -33,7 +33,8 @@ def create_tables(tables = tables):
             print('Reason: {}'.format(e))
         print('_____________________________________')
 
-def init(loop):
+def init():
+    loop = asyncio.get_event_loop()
     # setup application and extensions
     app = web.Application(loop=loop)
 
@@ -71,8 +72,7 @@ def init(loop):
 
 # Creates the app for gunicorn
 def run_gunicorn():
-    loop = asyncio.get_event_loop()
-    app = init(loop=loop)
+    app = init()
     return app
 
 # App used by gunicorn
@@ -81,8 +81,7 @@ app = run_gunicorn()
 
 # Starts the web server
 def main(argv):
-    loop = asyncio.get_event_loop()
-    app = init(loop)
+    app = init()
     web.run_app(app,  host=app['config']['host'],\
                 port=app['config']['port'])
 

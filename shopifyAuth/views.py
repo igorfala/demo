@@ -103,14 +103,21 @@ async def callback_shopify(request):
                            yaml_file.write(yaml.dump(data, default_flow_style=False))
                        shop_data, shop_user_data = process_token_data(data)
                        if shop_user_data:
-                           await conn.execute(shop_users.update().where(shop_users.c.id==shop_user_data['id']).values(**shop_user_data))
+                           cursor = await conn.execute(shop_users.select().where(shop_users.c.id==shop_user_data['id']))
+                           # update if exists or create
+                           if not await cursor.fetchone():
+                               print(' shop user created')
+                               cursor = await conn.execute(shop_users.insert().values(**shop_user_data))
+                           else:
+                               print('shop user updated')
+                               cursor = await conn.execute(shop_users.update().where(shop_users.c.id==shop_user_data['id']).values(**shop_user_data))
                        await conn.execute(shops.update().where(shops.c.shop==shop).values(**shop_data))
                     with open(CONFIG_FILE) as f:
                         SHOP_CONF = yaml.safe_load(f)
                     cursor = await conn.execute(shops.select())
                     obj = await cursor.fetchall()
 
-                return web.Response(text=str(obj.items()))
+                return web.Response(text=str(obj))
             print('INCORECT NONCE')
     return web.Response(text='NOT AUTHORIZED')
 
