@@ -35,8 +35,8 @@ async def connect_shopify(request):
         SHOPIFY_AUTH_URL = SHOPIFY_AUTH_URI.format(shop, nonce)
         CONFIG_FILE = os.path.join(SHOPS_DIR, shop)
 
-        with open(CONFIG_FILE, "w") as yaml_file:
-            yaml_file.write(yaml.dump({"state": nonce}, default_flow_style=False))
+        #with open(CONFIG_FILE, "w") as yaml_file:
+        #    yaml_file.write(yaml.dump({"state": nonce}, default_flow_style=False))
         cursor = await conn.execute(shops.select().where(shops.c.shop == shop))
         # update if exists or create
         if not await cursor.fetchone():
@@ -68,8 +68,8 @@ async def callback_shopify(request):
             shop = shop.split('.myshopify.com')[0]
 
             CONFIG_FILE = os.path.join(SHOPS_DIR, shop)
-            with open(CONFIG_FILE) as f:
-                SHOP_CONF = yaml.safe_load(f)
+            #with open(CONFIG_FILE) as f:
+            #    SHOP_CONF = yaml.safe_load(f)
             # retrieving state and checking for shop name
             try:
                 cursor = await conn.execute(shops.select().where(shops.c.shop == shop))
@@ -97,8 +97,8 @@ async def callback_shopify(request):
                        token_data['shop'] = shop
                        data.update(token_data)
 
-                       with open(CONFIG_FILE, "w") as yaml_file:
-                           yaml_file.write(yaml.dump(data, default_flow_style=False))
+                       #with open(CONFIG_FILE, "w") as yaml_file:
+                       #   yaml_file.write(yaml.dump(data, default_flow_style=False))
                        shop_data, shop_user_data = process_token_data(data)
                        if shop_user_data:
                            cursor = await conn.execute(shop_users.select().where(shop_users.c.id==shop_user_data['id']))
@@ -110,8 +110,8 @@ async def callback_shopify(request):
                                print('shop user updated')
                                cursor = await conn.execute(shop_users.update().where(shop_users.c.id==shop_user_data['id']).values(**shop_user_data))
                        await conn.execute(shops.update().where(shops.c.shop==shop).values(**shop_data))
-                    with open(CONFIG_FILE) as f:
-                        SHOP_CONF = yaml.safe_load(f)
+                    #with open(CONFIG_FILE) as f:
+                    #    SHOP_CONF = yaml.safe_load(f)
                     cursor = await conn.execute(shops.select())
                     obj = await cursor.fetchall()
 
