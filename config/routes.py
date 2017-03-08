@@ -7,10 +7,7 @@ shopifyAuth_rt = [
     ('*', '/',                                shopifyAuth_v.auth,               'a_auth_shopify'),
     ('GET', '/connect_shopify/{shop}',        shopifyAuth_v.connect_shopify,    'a_connect_shopify'),
     ('GET', '/auth/shopify/callback',         shopifyAuth_v.callback_shopify,   'a_callback_shopify'),
-    ('GET', '/post_it/{code}',                shopifyAuth_v.post_it,            's_post'),
-    ('POST', '/post_to',                      shopifyAuth_v.post_to,            's_post_to'),
-
-    ]
+        ]
 
 # routes for shopify
 shopify_rt = [

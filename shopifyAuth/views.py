@@ -78,7 +78,6 @@ async def callback_shopify(request):
 
             except Exception as e:
                 print('Reason: {}'.format(e))
-                print('_____________________________________')
                 return web.Response(text='NOT AUTHORIZED')
 
             if state == nonce:
@@ -94,7 +93,6 @@ async def callback_shopify(request):
                        data=json.dumps(payload),\
                        headers=headers) as resp:
                        token_data = await resp.json()
-                       #token_data = json.loads(token_data)
                        print(resp.status, token_data, type(token_data), token_data, type(token_data))
                        token_data['shop'] = shop
                        data.update(token_data)
@@ -120,34 +118,3 @@ async def callback_shopify(request):
                 return web.Response(text=str(obj))
             print('INCORECT NONCE')
     return web.Response(text='NOT AUTHORIZED')
-
-###########################
-# testing
-async def post_it(request):
-    async with ClientSession() as session:
-        host = request.host
-        http = str(request.url).split(host)[0]
-        url = http+host+'/post_to'
-        headers = {"Content-type": "application/json",}
-        payload = {}
-        payload['client_id'] = APP_CONF['shopify']['key']
-        payload['client_secret'] = APP_CONF['shopify']['secret']
-        payload['code'] = '468b0ab605c66c2e597aa8859c2af0f7'
-        print(headers)
-        async with session.post(url,\
-           data=json.dumps(payload),\
-           headers=headers) as resp:
-           print(resp.status)
-           print(await resp.text())
-    return web.Response(text=await resp.text())
-
-async def post_to(request):
-    data = await request.json()
-    print(request.headers)
-    CONFIG_FILE = os.path.join(SHOPS_DIR, 'kuvee-test1')
-    with open(CONFIG_FILE, "a") as yaml_file:
-        yaml_file.write(yaml.dump(data, default_flow_style=False))
-    for d in data:
-
-        print(d, data[d], type(data))
-    return web.Response(text=str(data))

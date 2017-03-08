@@ -12,7 +12,7 @@ async def img(request):
         return
 #example
 async def proxy(request):
-    context = {'params': "some params"}
+    context = {}
     response = aiohttp_jinja2.render_template('index.html', request, context)
     #response.headers['Content-Type'] = 'application/liquid'
     print(response, response.headers)
@@ -20,9 +20,13 @@ async def proxy(request):
 
 #Displays shop Info to liquid
 async def shop_info(request):
+    try:
+        data = dict(request.rel_url.query)
+        shop = data['shop']
+    except Exception as e:
+        print(e)
+        return web.Response(text='NOT AUTHORIZED', status=404)
 
-    data = dict(request.rel_url.query)
-    shop = data['shop']
     # checking that it's coming from shopify
     if not '.myshopify.com' in shop:
         return web.Response(text='NOT AUTHORIZED', status=404)
@@ -33,9 +37,8 @@ async def shop_info(request):
         row = await cursor.fetchone()
         token = row.access_token
         context = await get_shop_info(shop, token)
-        print(context, type(context))
         response = aiohttp_jinja2.render_template('shop.html', request, context)
-        #response.headers['Content-Type'] = 'application/liquid'
+        response.headers['Content-Type'] = 'application/liquid'
         return response
 
 # Call to the API to get Shop Info
