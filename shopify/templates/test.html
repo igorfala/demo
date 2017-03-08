@@ -1,0 +1,8 @@
+<h1> HELLO </h1>
+{% for product in all_products %}
+{{ product.title }}
+{% endfor %}
+
+{% for product in collections.frontpage.products %}
+  {{ product.title }}
+{% endfor %}

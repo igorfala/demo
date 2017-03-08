@@ -6,10 +6,16 @@ import aiohttp_jinja2
 #example
 @aiohttp_jinja2.template('index.html')
 async def img(request):
-    async with request.app['db'].acquire() as conn:
-        #cursor = await conn.execute(db.question.select())
-        #records = await cursor.fetchall()
-        return
+    return
+
+#example
+async def test(request):
+    context = {}
+    response = aiohttp_jinja2.render_template('test.html', request, context)
+    response.headers['Content-Type'] = 'application/liquid'
+    print(response, response.headers)
+    return response
+
 #example
 async def proxy(request):
     context = {}

@@ -44,16 +44,16 @@ def init():
         return sep.join('' if v is None else str(v) for v in value)
 
     jinja_args = {
-        #'block_start_string': '<%',
-        #'block_end_string': '%>',
-        #'variable_start_string': '<<',
-        #'variable_end_string': '>>',
-        #'line_statement_prefix': '#',
-        #'line_comment_prefix': '##',
+        'block_start_string': '<%',
+        'block_end_string': '%>',
+        'variable_start_string': '<<',
+        'variable_end_string': '>>',
+        'line_statement_prefix': '#',
+        'line_comment_prefix': '##',
         'loader': jinja2.FileSystemLoader(TEMPLATE_DIRS),
-        #'filters': {
-        #    'null_join': null_join,
-        #},
+        'filters': {
+            'null_join': null_join,
+        },
     }
 
     # setup Jinja2 template renderer
