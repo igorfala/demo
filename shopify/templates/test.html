@@ -6,3 +6,11 @@
 {% for product in collections.frontpage.products %}
   {{ product.title }}
 {% endfor %}
+
+{% for product in collections.products %}
+  {{ product.title }}
+{% endfor %}
+
+{% for product in collections.all.products %}
+  {{ product.title }}
+{% endfor %}
