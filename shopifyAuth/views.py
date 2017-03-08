@@ -33,7 +33,7 @@ async def connect_shopify(request):
         shop = request.match_info['shop']
         nonce = uuid.uuid4().hex
         SHOPIFY_AUTH_URL = SHOPIFY_AUTH_URI.format(shop, nonce)
-        CONFIG_FILE = os.path.join(SHOPS_DIR, shop)
+        #CONFIG_FILE = os.path.join(SHOPS_DIR, shop)
 
         #with open(CONFIG_FILE, "w") as yaml_file:
         #    yaml_file.write(yaml.dump({"state": nonce}, default_flow_style=False))
@@ -65,9 +65,9 @@ async def callback_shopify(request):
 
         # checking that it's coming from shopify
         if '.myshopify.com' in shop:
-            shop = shop.split('.myshopify.com')[0]
-
-            CONFIG_FILE = os.path.join(SHOPS_DIR, shop)
+            #shop = shop.split('.myshopify.com')[0]
+            shop = shop.replace('.myshopify.com', '')
+            #CONFIG_FILE = os.path.join(SHOPS_DIR, shop)
             #with open(CONFIG_FILE) as f:
             #    SHOP_CONF = yaml.safe_load(f)
             # retrieving state and checking for shop name
@@ -112,9 +112,17 @@ async def callback_shopify(request):
                        await conn.execute(shops.update().where(shops.c.shop==shop).values(**shop_data))
                     #with open(CONFIG_FILE) as f:
                     #    SHOP_CONF = yaml.safe_load(f)
-                    cursor = await conn.execute(shops.select())
-                    obj = await cursor.fetchall()
+                    #cursor = await conn.execute(shops.select())
+                    #obj = await cursor.fetchall()
 
-                return web.Response(text=str(obj))
+                #return web.Response(text=str(obj))
+                SHOP_URL = 'https://{}.myshopify.com'.format(shop)
+                return web.Response(
+                    status=302,
+                    headers={
+                        'location': SHOP_URL,
+                    },
+                )
+
             print('INCORECT NONCE')
     return web.Response(text='NOT AUTHORIZED')
