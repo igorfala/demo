@@ -1,16 +1,18 @@
-<h1> HELLO </h1>
-{% for product in all_products %}
-{{ product.title }}
-{% endfor %}
 
-{% for product in collections.frontpage.products %}
-  {{ product.title }}
-{% endfor %}
-
-{% for product in collections.products %}
-  {{ product.title }}
-{% endfor %}
-
-{% for product in collections.all.products %}
-  {{ product.title }}
-{% endfor %}
+<div class="grid grid--uniform grid--view-items">
+  {% for product in collections.all.products %}
+  <div class="grid__item grid__item--collection-template small--one-half medium-up--one-quarter">
+    <div class="grid-view-item">
+      <a class="grid-view-item__link" href="{{ product.url }}">
+        <img class="grid-view-item__image" src="{{ product | img_url: '250x250' }}" >
+        <div class="h4 grid-view-item__title">{{ product.title }}</div>
+        <div class="grid-view-item__meta">
+          <!-- snippet/product-price.liquid -->
+          <span class="visually-hidden">Regular price</span>
+          <span class="product-price__price">{{ product.price }}</span>
+        </div>
+      </a>
+    </div>
+  </div>
+  {% endfor %}
+</div>

@@ -10,6 +10,18 @@ async def img(request):
 
 #example
 async def test(request):
+    try:
+        data = dict(request.rel_url.query)
+        shop = data['shop']
+    except Exception as e:
+        print(e)
+        return web.Response(text='NOT AUTHORIZED', status=404)
+
+    # checking that it's coming from shopify
+    if not '.myshopify.com' in shop:
+        return web.Response(text='NOT AUTHORIZED', status=404)
+    print(shop)
+    
     context = {}
     response = aiohttp_jinja2.render_template('test.html', request, context)
     response.headers['Content-Type'] = 'application/liquid'
@@ -26,6 +38,7 @@ async def proxy(request):
 
 #Displays shop Info to liquid
 async def shop_info(request):
+    """
     try:
         data = dict(request.rel_url.query)
         shop = data['shop']
@@ -37,14 +50,16 @@ async def shop_info(request):
     if not '.myshopify.com' in shop:
         return web.Response(text='NOT AUTHORIZED', status=404)
     shop = shop.split('.myshopify.com')[0]
-
+    """
+    shop = 'kuvee-test1'
     async with request.app['db'].acquire() as conn:
         cursor = await conn.execute(shops.select().where(shops.c.shop == shop))
         row = await cursor.fetchone()
         token = row.access_token
         context = await get_shop_info(shop, token)
+        print(context)
         response = aiohttp_jinja2.render_template('shop.html', request, context)
-        response.headers['Content-Type'] = 'application/liquid'
+        #response.headers['Content-Type'] = 'application/liquid'
         return response
 
 # Call to the API to get Shop Info

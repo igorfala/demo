@@ -1,32 +1,32 @@
-{% extends "liquid_base.html" %}
-{% block title %}
+<% extends "liquid_base.html" %>
+<% block title %>
 Products Info
-{% endblock title %}
+<% endblock title %>
 
-{% block content %}
+<% block content %>
 <h1 class="text-center">Products Available</h1>
 <br>
-{% for product in products %}
+# for product in products
 <div class="grid-view-item">
   <a class="grid-view-item__link" href="/products/pagani-huayra">
-    <img class="grid-view-item__image" src="{{ product.image.src  }}" alt="Pagani Huayra">
-    <div class="h4 grid-view-item__title">{{ product.title }}</div>
+    <img class="grid-view-item__image" src="<< product.image.src  >>" alt="Pagani Huayra">
+    <div class="h4 grid-view-item__title"><< product.title >></div>
 
     <div class="grid-view-item__meta">
       <!-- snippet/product-price.liquid -->
 
     <span class="visually-hidden">Regular price</span>
-    <span class="product-price__price">{{ product.price }}</span>
+    <span class="product-price__price"><< product.price >></span>
 
     </div>
   </a>
 </div>
-{% endfor %}
+# endfor 
 <ul>
-{% for product in products %}
-<li>{{product.title}}:&nbsp<a href="/">{{ product.vendor }}</a></li>
-{% endfor %}
+<% for product in products %>
+<li><<product.title>>:&nbsp<a href="/"><< product.vendor >></a></li>
+<% endfor %>
 </ul>
 
 <br/><br/>
-{% endblock content %}
+<% endblock content %>
