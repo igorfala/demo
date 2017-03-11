@@ -1,6 +1,7 @@
 
-<div class="grid grid--uniform grid--view-items">
+<div class="grid grid--uniform grid--view-items" style="padding:30px;">
   {% for product in collections.all.products %}
+    {% if product.available %}
   <div class="grid__item grid__item--collection-template small--one-half medium-up--one-quarter">
     <div class="grid-view-item">
       <a class="grid-view-item__link" href="{{ product.url }}">
@@ -14,5 +15,6 @@
       </a>
     </div>
   </div>
+  {% endif %}
   {% endfor %}
 </div>
