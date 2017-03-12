@@ -1,3 +1,5 @@
+<h1 class="text-center" style="text-align: center;">Products Available</h1>
+<br><br>
 
 <div class="grid grid--uniform grid--view-items" style="padding:30px;">
   {% for product in collections.all.products %}
@@ -10,7 +12,7 @@
         <div class="grid-view-item__meta">
           <!-- snippet/product-price.liquid -->
           <span class="visually-hidden">Regular price</span>
-          <span class="product-price__price">{{ product.price }}</span>
+          <span class="product-price__price">{{ product.price | money_with_currency }}</span>
         </div>
       </a>
     </div>

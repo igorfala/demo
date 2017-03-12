@@ -1,25 +1,30 @@
 from aiohttp import web
 from config.routes import setup_routes
 from config.models import init_pg, close_pg, tables, engine_pg
-from config.settings import shopifyAuth_DIR, shopify_DIR, BASE_DIR, TEMPLATE_DIRS, APP_CONF
+from config.settings import TEMPLATE_DIRS, APP_CONF
 import asyncio, aiohttp_jinja2, jinja2
 import sqlalchemy
 import sys, os
 import argparse
 
 #command line parser
+# not completed
 def parser(*args):
     parser = argparse.ArgumentParser(description='Main command for the app')
     parser.add_argument('option1', help='runs the local web server', \
-                        default = 'run', nargs='?')
+                        default = 'runserver', nargs='?')
     parser.add_argument('option2', help='runs the local web server', \
                         default = None, nargs='?')
     args = parser.parse_args()
-    if args.option1 == 'run':
+    # could be None ( it will also run server )
+    if args.option1 == 'runserver':
         # not processed (for host and port)
-        main(args.option2)
+        runserver(args.option2)
+    #for migrations
     elif args.option1 == 'migrate':
         create_tables(tables )
+    else:
+        print('Invalid command')
 
 # called with migrate command
 def create_tables(tables = tables):
@@ -78,9 +83,8 @@ def run_gunicorn():
 # App used by gunicorn
 app = run_gunicorn()
 
-
 # Starts the web server
-def main(argv):
+def runserver(argv):
     app = init()
     web.run_app(app,  host=app['config']['host'],\
                 port=app['config']['port'])

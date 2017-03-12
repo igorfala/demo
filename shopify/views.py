@@ -1,14 +1,10 @@
 from aiohttp import web, ClientSession, BasicAuth
 from shopifyAuth.models import shops, shop_users
-import shopifyAuth.models
+from shopify.helpers.proxy_check import proxy_signature_is_valid
+from config.settings import APP_CONF
 import aiohttp_jinja2
 
-#example
-@aiohttp_jinja2.template('index.html')
-async def img(request):
-    return
-
-#example
+# page served in shopify
 async def test(request):
     try:
         data = dict(request.rel_url.query)
@@ -20,38 +16,17 @@ async def test(request):
     # checking that it's coming from shopify
     if not '.myshopify.com' in shop:
         return web.Response(text='NOT AUTHORIZED', status=404)
-    print(shop)
-    
+    print(proxy_signature_is_valid(data, APP_CONF['shopify']['secret']))
+
     context = {}
     response = aiohttp_jinja2.render_template('test.html', request, context)
     response.headers['Content-Type'] = 'application/liquid'
     print(response, response.headers)
     return response
 
-#example
-async def proxy(request):
-    context = {}
-    response = aiohttp_jinja2.render_template('index.html', request, context)
-    #response.headers['Content-Type'] = 'application/liquid'
-    print(response, response.headers)
-    return response
-
-#Displays shop Info to liquid
+#Displays products Info from API queries.
 async def shop_info(request):
-    """
-    try:
-        data = dict(request.rel_url.query)
-        shop = data['shop']
-    except Exception as e:
-        print(e)
-        return web.Response(text='NOT AUTHORIZED', status=404)
-
-    # checking that it's coming from shopify
-    if not '.myshopify.com' in shop:
-        return web.Response(text='NOT AUTHORIZED', status=404)
-    shop = shop.split('.myshopify.com')[0]
-    """
-    shop = 'kuvee-test1'
+    shop = request.match_info['shop']
     async with request.app['db'].acquire() as conn:
         cursor = await conn.execute(shops.select().where(shops.c.shop == shop))
         row = await cursor.fetchone()
@@ -71,3 +46,17 @@ async def get_shop_info(shop, token):
 
         async with session.get(url, headers=headers) as resp:
             return await resp.json()
+
+
+#example
+@aiohttp_jinja2.template('index.html')
+async def img(request):
+    return
+
+#example
+async def index(request):
+    context = {}
+    response = aiohttp_jinja2.render_template('index.html', request, context)
+    #response.headers['Content-Type'] = 'application/liquid'
+    print(response, response.headers)
+    return response

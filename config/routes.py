@@ -2,26 +2,19 @@ from config.settings import STATIC_DIR
 import shopifyAuth.views as shopifyAuth_v
 import shopify.views as shopify_v
 
-# routes for shopifyAuth
-shopifyAuth_rt = [
+# all the routes
+# for new apps import the views and add routes to the list
+routes = [
+    # routes for shopifyAuth
     ('*', '/',                                shopifyAuth_v.auth,               'a_auth_shopify'),
     ('GET', '/connect_shopify/{shop}',        shopifyAuth_v.connect_shopify,    'a_connect_shopify'),
     ('GET', '/auth/shopify/callback',         shopifyAuth_v.callback_shopify,   'a_callback_shopify'),
-        ]
-
-# routes for shopify
-shopify_rt = [
-    ('GET', '/proxy/img',                     shopify_v.img,                    's_img'),
-    ('GET', '/proxy/test',                     shopify_v.test,                  's_test'),
-    ('GET', '/proxy/index',                         shopify_v.proxy,            's_proxy'),
-    ('GET', '/proxy/shop_info',        shopify_v.shop_info,                     's_shop_info'),
+    # routes for shopify
+    ('GET', '/img',                           shopify_v.img,                    's_img'),
+    ('GET', '/proxy/test',                    shopify_v.test,                   's_test'),
+    ('GET', '/index',                         shopify_v.index,                  's_index'),
+    ('GET', '/shop_info/{shop}',              shopify_v.shop_info,              's_shop_info'),
     ]
-
-# all the routes
-# for new apps create new route list
-# then add it to routes: routes+=new_rt_list
-routes = shopifyAuth_rt
-routes += shopify_rt
 
 # route dispatch
 def setup_routes(app):

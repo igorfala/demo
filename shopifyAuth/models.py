@@ -4,7 +4,7 @@ import aiopg.sa   # aiohttp library for postgres
 import os
 
 meta = sa.MetaData()
-
+#stores data of shop user that gives authorization
 shop_users = sa.Table(
     'shop_users', meta,
     sa.Column('id', sa.Integer, nullable=False),
@@ -16,7 +16,7 @@ shop_users = sa.Table(
     # Indexes #
     sa.PrimaryKeyConstraint('id', name='shop_id_pkey'),
     )
-
+# stores all the shop token data
 shops = sa.Table(
     'shops', meta,
     sa.Column('id', sa.Integer, nullable=False, primary_key=True),

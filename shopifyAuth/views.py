@@ -16,7 +16,7 @@ async def auth(request):
         data = await request.post()
         shop = data['shop']
         host = request.url
-        url = str(host) + 'connect_shopify/' + shop
+        url = '{}connect_shopify/{}'.format(host, shop)
         return web.Response(
             status=302,
             headers={
@@ -33,10 +33,6 @@ async def connect_shopify(request):
         shop = request.match_info['shop']
         nonce = uuid.uuid4().hex
         SHOPIFY_AUTH_URL = SHOPIFY_AUTH_URI.format(shop, nonce)
-        #CONFIG_FILE = os.path.join(SHOPS_DIR, shop)
-
-        #with open(CONFIG_FILE, "w") as yaml_file:
-        #    yaml_file.write(yaml.dump({"state": nonce}, default_flow_style=False))
         cursor = await conn.execute(shops.select().where(shops.c.shop == shop))
         # update if exists or create
         if not await cursor.fetchone():
@@ -73,19 +69,19 @@ async def callback_shopify(request):
 
             except Exception as e:
                 print('Reason: {}'.format(e))
-                return web.Response(text='NOT AUTHORIZED')
+                return web.Response(text='NOT AUTHORIZED', status=404)
 
             if state == nonce:
-
                 token_data = await get_token(shop, code)
                 token_data['shop'] = shop
                 data.update(token_data)
                 shop_data, shop_user_data = process_token_data(data)
+
                 if shop_user_data:
                     cursor = await conn.execute(shop_users.select().where(shop_users.c.id==shop_user_data['id']))
                     # update if exists or create
                     if not await cursor.fetchone():
-                        print(' shop user created')
+                        print('shop user created')
                         cursor = await conn.execute(shop_users.insert().values(**shop_user_data))
                     else:
                         print('shop user updated')
@@ -93,6 +89,7 @@ async def callback_shopify(request):
                 await conn.execute(shops.update().where(shops.c.shop==shop).values(**shop_data))
 
                 SHOP_URL = 'https://{}.myshopify.com'.format(shop)
+                #redirect to shop's main page
                 return web.Response(
                 status=302,
                 headers={
@@ -101,19 +98,18 @@ async def callback_shopify(request):
                     )
 
             print('INCORECT NONCE')
-        print('REQUEST NOT FROM SHOPIFY')
-    return web.Response(text='NOT AUTHORIZED')
+    return web.Response(text='NOT AUTHORIZED', status=404)
 
 # gets the token data
 async def get_token(shop, code):
     async with ClientSession() as session:
-        url = APP_CONF['shopify']['admin_uri'].format(shop)
+        url = APP_CONF['shopify']['token_uri'].format(shop)
         headers = {"Content-type": "application/json",}
         payload = {}
         payload['client_id'] = APP_CONF['shopify']['key']
         payload['client_secret'] = APP_CONF['shopify']['secret']
         payload['code'] = code
-
+        # post request to get the access token
         async with session.post(url, data=json.dumps(payload),\
                                      headers=headers) as resp:
             return await resp.json()
