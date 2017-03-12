@@ -36,7 +36,7 @@ async def connect_shopify(request):
         cursor = await conn.execute(shops.select().where(shops.c.shop == shop))
         # update if exists or create
         if not await cursor.fetchone():
-            print(' shop created')
+            print('shop created')
             cursor = await conn.execute(shops.insert().values(state=nonce, shop=shop))
         else:
             print('shop updated')

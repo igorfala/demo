@@ -1,16 +1,18 @@
-from config.settings import DEBUG
+from config.settings import DEBUG, APP_CONF
+from sqlalchemy_utils import EncryptedType
 import sqlalchemy as sa
 import aiopg.sa   # aiohttp library for postgres
 import os
 
+encrypion_key = APP_CONF['postgres']['encrypion_key']
 meta = sa.MetaData()
 #stores data of shop user that gives authorization
 shop_users = sa.Table(
     'shop_users', meta,
     sa.Column('id', sa.Integer, nullable=False),
-    sa.Column('first_name', sa.String(200), nullable=False),
-    sa.Column('last_name', sa.String(200), nullable=False),
-    sa.Column('email', sa.String(200), nullable=False),
+    sa.Column('first_name', EncryptedType(sa.String(200), encrypion_key), nullable=False),
+    sa.Column('last_name', EncryptedType(sa.String(200), encrypion_key), nullable=False),
+    sa.Column('email', EncryptedType(sa.String(200), encrypion_key), nullable=False),
     sa.Column('account_owner', sa.Boolean),
 
     # Indexes #
@@ -24,11 +26,11 @@ shops = sa.Table(
     sa.Column('associated_user_scope', sa.String(200)),
     sa.Column('associated_user_id', sa.Integer, ),
     sa.Column('timestamp', sa.Integer, ),
-    sa.Column('access_token', sa.String(200),  ),
-    sa.Column('state', sa.String(200), ),
-    sa.Column('code', sa.String(200), ),
-    sa.Column('shop', sa.String(200), unique=True),
-    sa.Column('hmac', sa.String(200), ),
+    sa.Column('access_token', EncryptedType(sa.String(200), encrypion_key),  ),
+    sa.Column('state', EncryptedType(sa.String(200), encrypion_key), ),
+    sa.Column('code', EncryptedType(sa.String(200), encrypion_key), ),
+    sa.Column('shop', EncryptedType(sa.String(200), encrypion_key), unique=True),
+    sa.Column('hmac', EncryptedType(sa.String(200), encrypion_key), ),
     sa.Column('expires_in', sa.Integer, ),
 
     # Indexes #

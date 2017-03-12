@@ -10,6 +10,7 @@ postgres:
   port: 5432
   user: vagrant
   url: "postgresql://vagrant:mobi@localhost:5432/demo"
+  encrypion_key: a38c3defb11448179a48c245814ac7ca
 
 shopify:
   auth_uri: https://{}.myshopify.com/admin/oauth/authorize?client_id={}&scope={}&redirect_uri={}&state={}&grant_options[]={}

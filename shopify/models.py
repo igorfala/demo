@@ -1,14 +1,16 @@
-from config.settings import DEBUG
+from config.settings import DEBUG, APP_CONF
+from sqlalchemy_utils import EncryptedType
 import sqlalchemy as sa
 import aiopg.sa   # aiohttp library for postgres
 import os
 
+encrypion_key = APP_CONF['postgres']['encrypion_key']
 meta = sa.MetaData()
 
 question = sa.Table(
     'question', meta,
     sa.Column('id', sa.Integer, nullable=False),
-    sa.Column('question_text', sa.String(200), nullable=False),
+    sa.Column('question_text', EncryptedType(sa.String(200), encrypion_key ), nullable=False),
     sa.Column('pub_date', sa.Date, nullable=False),
 
     # Indexes #
