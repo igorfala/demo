@@ -8,7 +8,7 @@ shopifyAuth_DIR = os.path.join(BASE_DIR, 'shopifyAuth')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 shopify_DIR = os.path.join(BASE_DIR, 'shopify')
 CONFIG_DIR = os.path.join(BASE_DIR, "config")
-SHOPS_DIR = os.path.join(CONFIG_DIR, "shops")
+#SHOPS_DIR = os.path.join(CONFIG_DIR, "shops")
 
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, "templates" ),
                 os.path.join(shopifyAuth_DIR, "templates" ),\

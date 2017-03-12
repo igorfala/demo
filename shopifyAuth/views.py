@@ -1,5 +1,5 @@
 from aiohttp import web, ClientSession
-from config.settings import CONFIG_DIR, APP_CONF, SHOPS_DIR
+from config.settings import CONFIG_DIR, APP_CONF
 from shopifyAuth.helpers.shopify import SHOPIFY_AUTH_URI, process_token_data
 from shopifyAuth.models import shops, shop_users
 import aiohttp_jinja2
@@ -92,9 +92,7 @@ async def callback_shopify(request):
                 #redirect to shop's main page
                 return web.Response(
                 status=302,
-                headers={
-                    'location': SHOP_URL,
-                    },
+                headers={ 'location': SHOP_URL,},
                     )
 
             print('INCORECT NONCE')

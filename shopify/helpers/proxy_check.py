@@ -15,7 +15,6 @@ def get_proxy_signature(query_dict, secret):
         if isinstance(v, list):
              v = ",".join(query_dict[key])
         sorted_params += "{0}={1}".format(key, v)
-    print(sorted_params)
     signature = hmac.new(secret.encode(), sorted_params.encode(), hashlib.sha256)
     return signature.hexdigest()
 
@@ -27,17 +26,13 @@ def proxy_signature_is_valid(query_dict, secret):
     # Extract the signature we're going to verify. If no signature's present, the request is invalid.
     try:
         signature_to_verify = query_dict.pop('signature')
-        print(signature_to_verify)
     except KeyError:
         return False
 
     calculated_signature = get_proxy_signature(query_dict, secret)
-    print(calculated_signature)
     # Try to use compare_digest() to reduce vulnerability to timing attacks.
     # If it's not available, just fall back to regular string comparison.
     try:
-        print('try')
         return hmac.compare_digest(calculated_signature, signature_to_verify)
     except AttributeError:
-        print('AttributeErrorerror')
         return calculated_signature == signature_to_verify

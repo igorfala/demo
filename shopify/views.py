@@ -32,11 +32,15 @@ async def shop_info(request):
         cursor = await conn.execute(shops.select().where(shops.c.shop == shop))
         row = await cursor.fetchone()
         token = row.access_token
-        context = await get_shop_info(shop, token)
-        print(context)
-        response = aiohttp_jinja2.render_template('shop.html', request, context)
-        #response.headers['Content-Type'] = 'application/liquid'
-        return response
+        try:
+            context = await get_shop_info(shop, token)
+            print(context)
+            response = aiohttp_jinja2.render_template('shop.html', request, context)
+            #response.headers['Content-Type'] = 'application/liquid'
+            return response
+        except Exception as e:
+            print(e)
+            return web.Response(text='NOT AUTHORIZED', status=404)
 
 # Call to the API to get Shop Info
 async def get_shop_info(shop, token):

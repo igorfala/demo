@@ -41,13 +41,11 @@ async def close_pg(app):
 def engine_pg(url):
     """
     @url: url of the DB
-    method to create sqlalchemy engine 
+    method to create sqlalchemy engine
     """
     if DEBUG == True:
-        #conf = app['postgres']
-        engine = sqlalchemy.create_engine(
-            url
-            )
+        engine = sqlalchemy.create_engine(url)
+
     else:
         DEFAULT_DB_ENV = os.environ['DATABASE_URL']
         engine = sqlalchemy.create_engine(DEFAULT_DB_ENV)
