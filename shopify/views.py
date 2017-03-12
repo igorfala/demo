@@ -16,13 +16,16 @@ async def test(request):
     # checking that it's coming from shopify
     if not '.myshopify.com' in shop:
         return web.Response(text='NOT AUTHORIZED', status=404)
-    print(proxy_signature_is_valid(data, APP_CONF['shopify']['secret']))
-
-    context = {}
-    response = aiohttp_jinja2.render_template('test.html', request, context)
-    response.headers['Content-Type'] = 'application/liquid'
-    print(response, response.headers)
-    return response
+    #print('proxy', proxy_signature_is_valid(data, APP_CONF['shopify']['secret']))
+    if proxy_signature_is_valid(data, APP_CONF['shopify']['secret']):
+        context = {}
+        response = aiohttp_jinja2.render_template('test.html', request, context)
+        response.headers['Content-Type'] = 'application/liquid'
+        print(response, response.headers)
+        return response
+    else:
+        print('didnt validate')
+    return web.Response(text='NOT AUTHORIZED', status=404)
 
 #Displays products Info from API queries.
 async def shop_info(request):

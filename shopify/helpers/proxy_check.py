@@ -24,8 +24,6 @@ def proxy_signature_is_valid(query_dict, secret):
     """
     Return true if the calculated signature matches that present in the query string of the given request.
     """
-
-
     # Extract the signature we're going to verify. If no signature's present, the request is invalid.
     try:
         signature_to_verify = query_dict.pop('signature')
